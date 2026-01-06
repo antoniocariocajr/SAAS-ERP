@@ -1,8 +1,9 @@
-package com.billerp.repository;
+package com.billerp.domain.repository;
 
-import com.billerp.model.Product;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
+
+import com.billerp.domain.model.Product;
 
 @Repository
 public interface ProductRepository extends MongoRepository<Product, String> {

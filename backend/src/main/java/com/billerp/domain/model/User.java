@@ -1,6 +1,7 @@
-package com.billerp.model;
+package com.billerp.domain.model;
 
 import org.springframework.data.mongodb.core.mapping.Document;
+import java.util.Set;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -10,10 +11,10 @@ import lombok.AllArgsConstructor;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection = "customers")
-public class Customer extends BaseEntity {
-    private String name;
+@Document(collection = "users")
+public class User extends BaseEntity {
+    private String username;
+    private String password;
     private String email;
-    private String phone;
-    private String address;
+    private Set<String> roles;
 }

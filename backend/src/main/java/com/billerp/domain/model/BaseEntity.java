@@ -1,4 +1,4 @@
-package com.billerp.model;
+package com.billerp.domain.model;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
