@@ -10,7 +10,7 @@ import com.billerp.dto.response.CategoryResponse;
 import com.billerp.domain.exception.CategoryNotFoundException;
 import com.billerp.domain.repository.CategoryRepository;
 import com.billerp.domain.validator.CategoryValidator;
-import com.billerp.service.intefaces.CategoryService;
+import com.billerp.service.interfaces.CategoryService;
 import com.billerp.service.mapper.CategoryMapper;
 
 @Service
