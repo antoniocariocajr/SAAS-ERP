@@ -1,4 +1,4 @@
-package com.billerp.config;
+package com.billerp.infrastructure.config;
 
 import java.time.Instant;
 
