@@ -1,7 +1,11 @@
 package com.billerp.domain.model;
 
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.billerp.domain.enums.InvoiceStatus;
+import com.billerp.domain.exception.InvoiceAlreadyExistsException;
+import com.billerp.domain.service.InvoiceCalculator;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -17,26 +21,28 @@ import lombok.AllArgsConstructor;
 @Document(collection = "invoices")
 public class Invoice extends BaseEntity {
 
-    @DBRef
-    private Customer customer;
-
+    private String customerId;
     private List<InvoiceItem> items;
     private BigDecimal totalAmount;
     private InvoiceStatus status;
     private LocalDate dueDate;
 
-    public enum InvoiceStatus {
-        PENDING, PAID, CANCELLED, OVERDUE
+    public void addItem(InvoiceItem item) {
+        items.add(item);
     }
 
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class InvoiceItem {
-        private String productId;
-        private String productName;
-        private Integer quantity;
-        private BigDecimal unitPrice;
-        private BigDecimal subTotal;
+    public void recalculateTotal(InvoiceCalculator calculator) {
+        this.totalAmount = calculator.calculateTotal(items);
+    }
+
+    public void pay() {
+        if (status == InvoiceStatus.PAID || status == InvoiceStatus.CANCELLED) {
+            throw new InvoiceAlreadyExistsException("Invoice already paid");
+        }
+        this.status = InvoiceStatus.PAID;
+    }
+
+    public void updateStatus(InvoiceCalculator calculator) {
+        this.status = calculator.calculateStatus(this);
     }
 }

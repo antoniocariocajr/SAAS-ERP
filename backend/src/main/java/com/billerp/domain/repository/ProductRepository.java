@@ -7,4 +7,8 @@ import com.billerp.domain.model.Product;
 
 @Repository
 public interface ProductRepository extends MongoRepository<Product, String> {
+
+    boolean existsByName(String name);
+
+    boolean existsBySku(String sku);
 }

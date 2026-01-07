@@ -5,16 +5,15 @@ import com.billerp.domain.exception.CategoryNotFoundException;
 import com.billerp.domain.repository.CategoryRepository;
 import com.billerp.dto.request.CategoryUpdateDTO;
 
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class CategoryValidator {
 
     private final CategoryRepository repository;
-
-    public CategoryValidator(CategoryRepository repository) {
-        this.repository = repository;
-    }
 
     public void validateName(String name) {
         if (repository.existsByName(name)) {
