@@ -17,6 +17,9 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 
+import com.billerp.domain.exception.UserNotFoundException;
+import com.billerp.domain.exception.UserUnauthorizedException;
+
 import static com.billerp.infrastructure.constants.ApiConstants.ISSUER;
 
 @Service
@@ -30,9 +33,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public LoginResponse authenticate(LoginRequest request) {
         User user = userRepository.findByUsername(request.username())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException(request.username(), "username"));
         if (!isLoginCorrect(request, user.getPassword())) {
-            throw new RuntimeException("Invalid password");
+            throw new UserUnauthorizedException(request.username());
         }
         return encode(user);
     }

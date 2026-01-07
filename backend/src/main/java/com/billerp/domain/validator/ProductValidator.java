@@ -25,13 +25,13 @@ public class ProductValidator {
 
     public void validateName(String name) {
         if (productRepository.existsByName(name)) {
-            throw new ProductAlreadyExistsException(name);
+            throw new ProductAlreadyExistsException(name, "name");
         }
     }
 
     public void validateSku(String sku) {
         if (productRepository.existsBySku(sku)) {
-            throw new ProductAlreadyExistsException(sku);
+            throw new ProductAlreadyExistsException(sku, "sku");
         }
     }
 

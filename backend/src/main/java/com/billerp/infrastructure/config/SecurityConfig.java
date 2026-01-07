@@ -6,6 +6,7 @@ import java.security.interfaces.RSAPublicKey;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -24,8 +25,6 @@ import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 
-import io.swagger.v3.oas.models.PathItem.HttpMethod;
-
 import static com.billerp.infrastructure.constants.ApiConstants.AUTH_WHITELIST;
 
 @Configuration
@@ -42,9 +41,8 @@ public class SecurityConfig {
 
                 http
                                 .authorizeHttpRequests(authorize -> authorize
-                                                // .requestMatchers(HttpMethod.POST, "/users").permitAll()
-                                                // .requestMatchers(HttpMethod.POST, "/login").permitAll()
-                                                // .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
+                                                .requestMatchers(HttpMethod.POST, "/api/v1/users").permitAll()
+                                                .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
                                                 .requestMatchers(AUTH_WHITELIST).permitAll()
                                                 .anyRequest().authenticated())
                                 .csrf(AbstractHttpConfigurer::disable)

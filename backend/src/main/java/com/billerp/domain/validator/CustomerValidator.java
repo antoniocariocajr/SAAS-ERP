@@ -19,19 +19,19 @@ public class CustomerValidator {
 
     public void validateId(String id) {
         if (!customerRepository.existsById(id)) {
-            throw new CustomerNotFoundException(id);
+            throw new CustomerNotFoundException(id, "id");
         }
     }
 
     public void validateName(String name) {
         if (customerRepository.existsByName(name)) {
-            throw new CustomerAlreadyExistsException(name);
+            throw new CustomerAlreadyExistsException(name, "name");
         }
     }
 
     public void validateEmail(String email) {
         if (customerRepository.existsByEmail(email)) {
-            throw new CustomerAlreadyExistsException(email);
+            throw new CustomerAlreadyExistsException(email, "email");
         }
     }
 

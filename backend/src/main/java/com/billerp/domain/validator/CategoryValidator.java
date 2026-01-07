@@ -17,23 +17,21 @@ public class CategoryValidator {
 
     public void validateName(String name) {
         if (repository.existsByName(name)) {
-            throw new CategoryAlreadyExistsException(name);
+            throw new CategoryAlreadyExistsException(name, "name");
         }
     }
 
     public void validateId(String id) {
         if (!repository.existsById(id)) {
-            throw new CategoryNotFoundException(id);
+            throw new CategoryNotFoundException(id, "id");
         }
     }
 
     public void validateUpdate(CategoryUpdateDTO dto) {
-        var category = repository.findById(dto.id())
-                .orElseThrow(() -> new CategoryNotFoundException(dto.id()));
+        validateId(dto.id());
+        var category = repository.findById(dto.id()).get();
         if (!dto.name().equals(category.getName())) {
-            if (repository.existsByName(dto.name())) {
-                throw new CategoryAlreadyExistsException(dto.name());
-            }
+            validateName(dto.name());
         }
     }
 }

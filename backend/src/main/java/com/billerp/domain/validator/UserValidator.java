@@ -18,19 +18,19 @@ public class UserValidator {
 
     public void validateEmail(String email) {
         if (userRepository.existsByEmail(email)) {
-            throw new UserException("Email already exists");
+            throw new UserException("Email already exists", "email");
         }
     }
 
     public void validateUsername(String username) {
         if (userRepository.existsByUsername(username)) {
-            throw new UserException("Username already exists");
+            throw new UserException("Username already exists", "username");
         }
     }
 
     public void validateId(String id) {
         if (!userRepository.existsById(id)) {
-            throw new UserNotFoundException(id);
+            throw new UserNotFoundException(id, "id");
         }
     }
 
@@ -38,10 +38,10 @@ public class UserValidator {
         validateId(id);
         var user = userRepository.findById(id).get();
         if (!user.getRoles().contains(role)) {
-            throw new UserException("User does not have role " + role);
+            throw new UserException("User does not have role " + role, "role");
         }
         if (user.getRoles().size() == 1) {
-            throw new UserException("User cannot have only one role");
+            throw new UserException("User cannot have only one role", "role");
         }
     }
 
