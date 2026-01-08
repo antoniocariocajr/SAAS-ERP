@@ -19,6 +19,7 @@ public final class ApiConstants {
     public static final String CORS_ORIGIN = "http://localhost:4200";
 
     public static final String[] AUTH_WHITELIST = {
+            "/",
             "/v3/api-docs/**",
             "/swagger-ui/**",
             "/swagger-ui.html"

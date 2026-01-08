@@ -20,5 +20,18 @@ services:
       - mongodb
     restart: unless-stopped
 
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: bill-erp-backend
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_MONGODB_URI=mongodb://mongodb:27017/bill-erp
+    depends_on:
+      - mongodb
+    restart: unless-stopped
+
 volumes:
   mongodb_data:

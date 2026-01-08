@@ -1,0 +1,12 @@
+.gradle
+build
+!build/libs/*.jar
+.vscode
+.git
+.gitignore
+Dockerfile
+docker-compose.yml
+help
+HELP.md
+bin/
+out/
