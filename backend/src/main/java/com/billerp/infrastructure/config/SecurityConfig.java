@@ -42,7 +42,7 @@ public class SecurityConfig {
                 http
                                 .authorizeHttpRequests(authorize -> authorize
                                                 .requestMatchers(HttpMethod.POST, "/api/v1/users").permitAll()
-                                                .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
+                                                .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                                                 .requestMatchers(AUTH_WHITELIST).permitAll()
                                                 .anyRequest().authenticated())
                                 .csrf(AbstractHttpConfigurer::disable)

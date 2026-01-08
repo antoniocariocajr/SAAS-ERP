@@ -62,6 +62,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public boolean isLoginCorrect(LoginRequest loginRequest, String password) {
-        return passwordEncoder.matches(password, loginRequest.password());
+        return passwordEncoder.matches(loginRequest.password(), password);
     }
 }
