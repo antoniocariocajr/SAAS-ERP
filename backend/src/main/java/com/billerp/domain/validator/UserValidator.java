@@ -36,7 +36,7 @@ public class UserValidator {
 
     public void validateRole(String id, Role role) {
         validateId(id);
-        var user = userRepository.findById(id).get();
+        var user = userRepository.findById(id).orElseThrow();
         if (!user.getRoles().contains(role)) {
             throw new UserException("User does not have role " + role, "role");
         }
@@ -47,7 +47,7 @@ public class UserValidator {
 
     public void validateUpdate(UserUpdateDto dto) {
         validateId(dto.id());
-        var user = userRepository.findById(dto.id()).get();
+        var user = userRepository.findById(dto.id()).orElseThrow();
         if (!dto.username().equals(user.getUsername())) {
             validateUsername(dto.username());
         }

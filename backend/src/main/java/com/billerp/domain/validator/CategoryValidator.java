@@ -29,7 +29,7 @@ public class CategoryValidator {
 
     public void validateUpdate(CategoryUpdateDTO dto) {
         validateId(dto.id());
-        var category = repository.findById(dto.id()).get();
+        var category = repository.findById(dto.id()).orElseThrow();
         if (!dto.name().equals(category.getName())) {
             validateName(dto.name());
         }

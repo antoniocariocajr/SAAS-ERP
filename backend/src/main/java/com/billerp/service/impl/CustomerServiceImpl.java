@@ -32,8 +32,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerResponse findById(String id) {
-        customerValidator.validateId(id);
-        Customer customer = customerRepository.findById(id).get();
+        Customer customer = getCustomer(id);
         return customerMapper.toResponse(customer);
     }
 
@@ -45,7 +44,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerResponse update(CustomerUpdateDTO dto) {
         customerValidator.validateUpdate(dto);
-        Customer customer = customerRepository.findById(dto.id()).get();
+        Customer customer = getCustomer(dto.id());
         customer.setName(dto.name());
         customer.setEmail(dto.email());
         customer.setAddress(dto.address());
@@ -55,16 +54,14 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerResponse activate(String id) {
-        customerValidator.validateId(id);
-        Customer customer = customerRepository.findById(id).get();
+        Customer customer = getCustomer(id);
         customer.setActive(true);
         return customerMapper.toResponse(customerRepository.save(customer));
     }
 
     @Override
     public CustomerResponse deactivate(String id) {
-        customerValidator.validateId(id);
-        Customer customer = customerRepository.findById(id).get();
+        Customer customer = getCustomer(id);
         customer.setActive(false);
         return customerMapper.toResponse(customerRepository.save(customer));
     }
@@ -73,5 +70,10 @@ public class CustomerServiceImpl implements CustomerService {
     public void delete(String id) {
         customerValidator.validateId(id);
         customerRepository.deleteById(id);
+    }
+
+    private Customer getCustomer(String id){
+        customerValidator.validateId(id);
+        return customerRepository.findById(id).orElseThrow();
     }
 }

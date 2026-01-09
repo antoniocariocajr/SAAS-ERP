@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
     public UserResponse addRole(String id, Role role) {
         userValidator.validateId(id);
         var user = userRepository.findById(id).orElseThrow();
-        user.getRoles().add(role);
+        user.addRole(role);
         return userMapper.toResponse(userRepository.save(user));
     }
 
@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService {
     public UserResponse removeRole(String id, Role role) {
         userValidator.validateRole(id, role);
         var user = userRepository.findById(id).orElseThrow();
-        user.getRoles().remove(role);
+        user.removeRole(role);
         return userMapper.toResponse(userRepository.save(user));
     }
 

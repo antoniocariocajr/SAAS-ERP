@@ -136,7 +136,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     public InvoiceResponse payInvoice(String id) {
         Invoice invoice = getInvoice(id);
-        invoice.setStatus(InvoiceStatus.PAID);
+        invoice.pay();
         invoiceRepository.save(invoice);
         return invoiceMapper.toResponse(invoice);
     }
@@ -174,6 +174,6 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     private Invoice getInvoice(String id) {
         invoiceValidator.validateId(id);
-        return invoiceRepository.findById(id).get();
+        return invoiceRepository.findById(id).orElseThrow();
     }
 }

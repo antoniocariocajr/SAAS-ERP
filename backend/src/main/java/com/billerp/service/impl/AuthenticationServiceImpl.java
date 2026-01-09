@@ -50,7 +50,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .collect(Collectors.joining(" "));
         var claims = JwtClaimsSet.builder()
                 .issuer(ISSUER)
-                .subject(user.getId().toString())
+                .subject(user.getId())
                 .issuedAt(now)
                 .expiresAt(now.plusSeconds(expiresIn))
                 .claim("scope", scopes)

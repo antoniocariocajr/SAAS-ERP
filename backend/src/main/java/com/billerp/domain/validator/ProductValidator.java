@@ -44,7 +44,7 @@ public class ProductValidator {
     public void validateUpdate(ProductUpdateDTO dto) {
         validateId(dto.id());
         categoryValidator.validateId(dto.categoryId());
-        Product product = productRepository.findById(dto.id()).get();
+        Product product = productRepository.findById(dto.id()).orElseThrow();
         if (!product.getName().equals(dto.name())) {
             validateName(dto.name());
         }

@@ -32,8 +32,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductResponse findById(String id) {
-        productValidator.validateId(id);
-        return productMapper.toResponse(productRepository.findById(id).get());
+        Product product = getProduct(id);
+        return productMapper.toResponse(product);
     }
 
     @Override
@@ -44,7 +44,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductResponse update(ProductUpdateDTO dto) {
         productValidator.validateUpdate(dto);
-        Product product = productRepository.findById(dto.id()).get();
+        Product product = getProduct(dto.id());
         product.setName(dto.name());
         product.setDescription(dto.description());
         product.setPrice(dto.price());
@@ -57,16 +57,14 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductResponse activate(String id) {
-        productValidator.validateId(id);
-        Product product = productRepository.findById(id).get();
+        Product product = getProduct(id);
         product.setActive(true);
         return productMapper.toResponse(productRepository.save(product));
     }
 
     @Override
     public ProductResponse deactivate(String id) {
-        productValidator.validateId(id);
-        Product product = productRepository.findById(id).get();
+        Product product = getProduct(id);
         product.setActive(false);
         return productMapper.toResponse(productRepository.save(product));
     }
@@ -75,5 +73,10 @@ public class ProductServiceImpl implements ProductService {
     public void delete(String id) {
         productValidator.validateId(id);
         productRepository.deleteById(id);
+    }
+
+    private Product getProduct(String id){
+        productValidator.validateId(id);
+        return productRepository.findById(id).orElseThrow();
     }
 }
