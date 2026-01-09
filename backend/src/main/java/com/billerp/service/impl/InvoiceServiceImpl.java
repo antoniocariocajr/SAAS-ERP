@@ -12,6 +12,8 @@ import com.billerp.dto.request.InvoiceItemRequest;
 import com.billerp.dto.response.InvoiceResponse;
 import com.billerp.service.interfaces.InvoiceService;
 import com.billerp.service.mapper.InvoiceMapper;
+import com.billerp.service.interfaces.EmailService;
+import com.billerp.domain.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.Page;
@@ -31,13 +33,23 @@ public class InvoiceServiceImpl implements InvoiceService {
     private final InvoiceFactory invoiceFactory;
     private final InvoiceItemFactory invoiceItemFactory;
     private final InvoiceCalculator invoiceCalculator;
+    private final EmailService emailService;
+    private final CustomerRepository customerRepository;
 
     @Override
     public InvoiceResponse create(InvoiceCreateDTO dto) {
         invoiceValidator.validateCreate(dto);
         Invoice invoice = invoiceFactory.from(dto);
         invoiceRepository.save(invoice);
-        return invoiceMapper.toResponse(invoice);
+
+        InvoiceResponse response = invoiceMapper.toResponse(invoice);
+
+        // Send email notification
+        customerRepository.findById(invoice.getCustomerId()).ifPresent(customer -> {
+            emailService.sendInvoiceEmail(response, customer.getEmail(), customer.getName());
+        });
+
+        return response;
     }
 
     @Override

@@ -1,7 +1,11 @@
 package com.billerp.dto.request;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+
 public record InvoiceItemRequest(
-        String productId,
-        Integer quantity) {
+                @NotNull @NotBlank String productId,
+                @NotNull @Positive Integer quantity) {
 
 }

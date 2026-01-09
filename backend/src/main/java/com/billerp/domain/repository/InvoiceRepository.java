@@ -28,4 +28,7 @@ public interface InvoiceRepository extends MongoRepository<Invoice, String> {
     Page<Invoice> findByDueDateAndStatus(LocalDate dueDate, InvoiceStatus status, Pageable pageable);
 
     Page<Invoice> findByCreatedAtBetween(LocalDateTime start, LocalDateTime end, Pageable pageable);
+
+    java.util.List<Invoice> findByStatusInAndDueDateIn(java.util.Collection<InvoiceStatus> statuses,
+            java.util.Collection<LocalDate> dueDates);
 }
