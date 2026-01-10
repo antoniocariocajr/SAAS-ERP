@@ -1,6 +1,7 @@
 package com.billerp.scheduler;
 
 import com.billerp.domain.enums.InvoiceStatus;
+import com.billerp.domain.model.Customer;
 import com.billerp.domain.repository.CustomerRepository;
 import com.billerp.domain.repository.InvoiceRepository;
 import com.billerp.service.interfaces.EmailService;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -36,7 +38,7 @@ public class PaymentReminderScheduler {
 
         invoiceRepository.findByStatusInAndDueDateIn(statusesToRemind, datesToRemind)
                 .forEach(invoice -> {
-                    customerRepository.findById(invoice.getCustomerId()).ifPresent(customer -> {
+                    getCustomer(invoice.getCustomerId()).ifPresent(customer -> {
                         log.info("Sending reminder for invoice {} to customer {}", invoice.getId(),
                                 customer.getEmail());
                         emailService.sendPaymentReminderEmail(
@@ -47,5 +49,12 @@ public class PaymentReminderScheduler {
                 });
 
         log.info("Payment reminder scheduled task completed.");
+    }
+
+    private Optional<Customer> getCustomer(String id) {
+        if (id == null || id.trim().isEmpty()) {
+            throw new IllegalArgumentException("Id cannot be null or empty");
+        }
+        return customerRepository.findById(id);
     }
 }

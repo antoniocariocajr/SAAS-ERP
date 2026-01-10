@@ -8,6 +8,7 @@ import com.billerp.dto.request.CategoryCreateDTO;
 import com.billerp.dto.request.CategoryUpdateDTO;
 import com.billerp.dto.response.CategoryResponse;
 import com.billerp.domain.exception.CategoryNotFoundException;
+import com.billerp.domain.model.Category;
 import com.billerp.domain.repository.CategoryRepository;
 import com.billerp.domain.validator.CategoryValidator;
 import com.billerp.service.interfaces.CategoryService;
@@ -29,7 +30,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryResponse create(CategoryCreateDTO dto) {
         validator.validateName(dto.name());
-        var category = categoryMapper.toModel(dto);
+        Category category = categoryMapper.toModel(dto);
         return categoryMapper.toResponse(categoryRepository.save(category));
     }
 
@@ -40,7 +41,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryResponse findById(String id) {
-        var category = categoryRepository.findById(id)
+        Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new CategoryNotFoundException(id));
         return categoryMapper.toResponse(category);
     }

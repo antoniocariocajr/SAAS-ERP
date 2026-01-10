@@ -6,6 +6,8 @@ import com.billerp.domain.enums.InvoiceStatus;
 import com.billerp.domain.exception.InvoiceAlreadyExistsException;
 import com.billerp.domain.service.InvoiceCalculator;
 
+import jakarta.validation.constraints.NotNull;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -20,7 +22,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 @Document(collection = "invoices")
 public class Invoice extends BaseEntity {
-
+    @NotNull
     private String customerId;
     private List<InvoiceItem> items;
     private BigDecimal totalAmount;

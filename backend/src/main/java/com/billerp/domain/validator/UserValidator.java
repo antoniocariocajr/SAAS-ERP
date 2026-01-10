@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import com.billerp.domain.enums.Role;
 import com.billerp.domain.exception.UserException;
 import com.billerp.domain.exception.UserNotFoundException;
+import com.billerp.domain.model.User;
 import com.billerp.domain.repository.UserRepository;
 import com.billerp.dto.request.UserCreateDTO;
 import com.billerp.dto.request.UserUpdateDto;
@@ -29,6 +30,9 @@ public class UserValidator {
     }
 
     public void validateId(String id) {
+        if (id == null || id.trim().isEmpty()) {
+            throw new IllegalArgumentException("Id cannot be null or empty");
+        }
         if (!userRepository.existsById(id)) {
             throw new UserNotFoundException(id, "id");
         }
@@ -36,7 +40,7 @@ public class UserValidator {
 
     public void validateRole(String id, Role role) {
         validateId(id);
-        var user = userRepository.findById(id).orElseThrow();
+        var user = getUser(id);
         if (!user.getRoles().contains(role)) {
             throw new UserException("User does not have role " + role, "role");
         }
@@ -47,7 +51,7 @@ public class UserValidator {
 
     public void validateUpdate(UserUpdateDto dto) {
         validateId(dto.id());
-        var user = userRepository.findById(dto.id()).orElseThrow();
+        var user = getUser(dto.id());
         if (!dto.username().equals(user.getUsername())) {
             validateUsername(dto.username());
         }
@@ -59,6 +63,14 @@ public class UserValidator {
     public void validateCreate(UserCreateDTO dto) {
         validateUsername(dto.username());
         validateEmail(dto.email());
+    }
+
+    private User getUser(String id) {
+        if (id == null || id.trim().isEmpty()) {
+            throw new IllegalArgumentException("Id cannot be null or empty");
+        }
+        return userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
     }
 
 }

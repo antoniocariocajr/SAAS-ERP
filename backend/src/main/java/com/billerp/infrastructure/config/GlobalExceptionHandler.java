@@ -4,6 +4,7 @@ import java.time.Instant;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -54,6 +55,17 @@ public class GlobalExceptionHandler {
                                 .body(new ErrorResponse(ex.getMessage(),
                                                 ex.getCode(),
                                                 ex.getField(),
+                                                req.getRequestURI(),
+                                                Instant.now()));
+        }
+
+        @ExceptionHandler(MethodArgumentNotValidException.class)
+        public ResponseEntity<ErrorResponse> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
+                        HttpServletRequest req) {
+                return ResponseEntity.badRequest()
+                                .body(new ErrorResponse(ex.getMessage(),
+                                                "VALIDATION",
+                                                null,
                                                 req.getRequestURI(),
                                                 Instant.now()));
         }

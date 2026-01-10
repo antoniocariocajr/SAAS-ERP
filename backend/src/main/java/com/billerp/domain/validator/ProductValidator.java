@@ -18,6 +18,9 @@ public class ProductValidator {
     private final CategoryValidator categoryValidator;
 
     public void validateId(String id) {
+        if (id == null || id.trim().isEmpty()) {
+            throw new IllegalArgumentException("Id cannot be null or empty");
+        }
         if (!productRepository.existsById(id)) {
             throw new ProductNotFoundException(id);
         }
@@ -44,13 +47,21 @@ public class ProductValidator {
     public void validateUpdate(ProductUpdateDTO dto) {
         validateId(dto.id());
         categoryValidator.validateId(dto.categoryId());
-        Product product = productRepository.findById(dto.id()).orElseThrow();
+        Product product = getProduct(dto.id());
         if (!product.getName().equals(dto.name())) {
             validateName(dto.name());
         }
         if (!product.getSku().equals(dto.sku())) {
             validateSku(dto.sku());
         }
+    }
+
+    private Product getProduct(String id) {
+        if (id == null || id.trim().isEmpty()) {
+            throw new IllegalArgumentException("Id cannot be null or empty");
+        }
+        return productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException(id));
     }
 
 }

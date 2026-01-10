@@ -18,6 +18,9 @@ public class CustomerValidator {
     private final CustomerRepository customerRepository;
 
     public void validateId(String id) {
+        if (id == null || id.trim().isEmpty()) {
+            throw new IllegalArgumentException("Id cannot be null or empty");
+        }
         if (!customerRepository.existsById(id)) {
             throw new CustomerNotFoundException(id, "id");
         }
@@ -42,7 +45,7 @@ public class CustomerValidator {
 
     public void validateUpdate(CustomerUpdateDTO dto) {
         validateId(dto.id());
-        Customer customer = customerRepository.findById(dto.id()).orElseThrow();
+        Customer customer = getCustomer(dto.id());
         if (dto.name() != null && !dto.name().equals(customer.getName())) {
             validateName(dto.name());
         }
@@ -51,4 +54,11 @@ public class CustomerValidator {
         }
     }
 
+    private Customer getCustomer(String id) {
+        if (id == null || id.trim().isEmpty()) {
+            throw new IllegalArgumentException("Id cannot be null or empty");
+        }
+        return customerRepository.findById(id)
+                .orElseThrow(() -> new CustomerNotFoundException(id));
+    }
 }

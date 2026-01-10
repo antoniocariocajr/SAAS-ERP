@@ -19,6 +19,9 @@ public class InvoiceValidator {
     private final CustomerValidator customerValidator;
 
     public void validateId(String id) {
+        if (id == null || id.trim().isEmpty()) {
+            throw new IllegalArgumentException("Id cannot be null or empty");
+        }
         if (!invoiceRepository.existsById(id)) {
             throw new InvoiceNotFoundException(id);
         }

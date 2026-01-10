@@ -15,20 +15,27 @@ import lombok.RequiredArgsConstructor;
 @Component
 @RequiredArgsConstructor
 public class InvoiceItemFactory {
-    private final ProductRepository productRepository;
+        private final ProductRepository productRepository;
 
-    public InvoiceItem create(InvoiceItemRequest req) {
-        Product product = productRepository.findById(req.productId())
-                .orElseThrow(() -> new ProductNotFoundException(req.productId()));
+        public InvoiceItem create(InvoiceItemRequest req) {
+                Product product = getProduct(req.productId());
 
-        BigDecimal subTotal = product.getPrice()
-                .multiply(BigDecimal.valueOf(req.quantity()));
+                BigDecimal subTotal = product.getPrice()
+                                .multiply(BigDecimal.valueOf(req.quantity()));
 
-        return new InvoiceItem(
-                product.getId(),
-                product.getName(),
-                req.quantity(),
-                product.getPrice(),
-                subTotal);
-    }
+                return new InvoiceItem(
+                                product.getId(),
+                                product.getName(),
+                                req.quantity(),
+                                product.getPrice(),
+                                subTotal);
+        }
+
+        private Product getProduct(String id) {
+                if (id == null || id.trim().isEmpty()) {
+                        throw new IllegalArgumentException("Id cannot be null or empty");
+                }
+                return productRepository.findById(id)
+                                .orElseThrow(() -> new ProductNotFoundException(id));
+        }
 }
